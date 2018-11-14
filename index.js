@@ -1,5 +1,6 @@
 const express  = require('express');
 const app  = express();
+const passport = require('passport')
 const PORT  = process.env.PORT || 3000;
 const bodyParser= require('body-parser');
 const mongoose = require('mongoose');
@@ -15,10 +16,14 @@ run().catch(error => console.error('cannot connect to the database server '+erro
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+//Passport middleware
+app.use(passport.initialize());
+require('./config/passport').isAdmin(passport);
+require('./config/passport').isLogin(passport);
+
+
 
 app.use('/api', require('./routes/routes.js'));
-
-
 
   app.listen(PORT, ()=>{
     console.log(`App started at PORT ${PORT}`)

@@ -8,3 +8,10 @@ exports.validateRegistered = (user) => {
     });
     return Joi.validate(user,schema);
 }
+exports.validateLoginUser = (user) => {
+    const schema = Joi.object().keys({
+        password: Joi.string().required().min(4),
+        email: Joi.string().email({ minDomainAtoms: 2 })
+    });
+    return Joi.validate(user,schema);
+}

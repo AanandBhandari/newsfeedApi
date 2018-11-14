@@ -1,6 +1,8 @@
-const {User} = require('../models/User.js')
-const {validateRegistered}= require('../validation/validation.js');
+const {User} = require("../models/User.js");
+const {validateRegistered,validateLoginUser}= require('../validation/validation.js');
+const {secretKey,expireTime} = require('../config/keys.js')
 const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
 exports.register = async(req,res) => {
     const { error } = validateRegistered(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -9,7 +11,7 @@ exports.register = async(req,res) => {
     if (user) return res.status(400).send("User already exists!");
 
     if(req.file !== undefined){
-        req.body.image = 'profilePic/'+req.file.filename;
+        req.body.image = 'profilePic'+req.file.filename;
         }else{
         req.body.image = 'no Image!';
         }
@@ -30,4 +32,23 @@ exports.register = async(req,res) => {
         res.status(201).json(newUser)
     
     
-}
+};
+
+exports.login = async(req,res) => {
+    console.log(expireTime)
+    const {error} = validateLoginUser(req.body)
+    if (error) return res.status(400).send(error.details[0].message);
+    const user = await User.findOne({email : req.body.email});
+    if(!user) return res.status(400).json('no user found!');
+    const isAuth = await bcrypt.compare(req.body.password, user.password);
+    if (!isAuth) return res.status(400).json("Password did not match");
+    const payload = {id : user.id, name : user.name, isAdmin : user.isAdmin};
+    jwt.sign(payload,secretKey, {expiresIn : expireTime}, (err,token) => {
+        res.json({
+            success : true,
+            token : token
+        });
+    });
+    
+  
+};
