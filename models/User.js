@@ -15,8 +15,7 @@ const UserSchema = new Schema({
         unique : true
     },
     password : {
-        type : String,
-        required : true
+        type : String
     },
     pic : {
         type : String,
@@ -28,7 +27,8 @@ const UserSchema = new Schema({
     isAdmin : {
         type : Boolean,
         default : false
-    }
+    },
+    googleId : String
 })
 
 exports.User = mongoose.model('user', UserSchema);

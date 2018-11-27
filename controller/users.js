@@ -3,6 +3,14 @@ const {validateRegistered,validateLoginUser}= require('../validation/validation.
 const {secretKey,expireTime} = require('../config/keys.js')
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
+const passportGoogle = require('passport');
+exports.loginWithGoogle = passportGoogle.authenticate('google',{scope:['profile','email']});
+exports.callbackUri = passportGoogle.authenticate('google',{ session: false });
+exports.googleCallBackFunction = async(req,res) => {
+    // console.log(req.user)
+    console.log(req.user)
+}
+
 exports.register = async(req,res) => {
     const { error } = validateRegistered(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -35,7 +43,7 @@ exports.register = async(req,res) => {
 };
 
 exports.login = async(req,res) => {
-    console.log(expireTime)
+    
     const {error} = validateLoginUser(req.body)
     if (error) return res.status(400).send(error.details[0].message);
     const user = await User.findOne({email : req.body.email});
@@ -52,3 +60,4 @@ exports.login = async(req,res) => {
     
   
 };
+

@@ -1,9 +1,10 @@
 const {AddPosts} = require('../models/Post.js')
 exports.showPosts = async (req,res) => {
-    console.log('helloworld1')
+    // console.log('helloworld1')
+    res.json(req.user)
 }
 exports.addPosts = async (req,res) => {
-    // console.log(req.files)
+    
     let image = [];
     if (req.files !== undefined) {
         req.files.map((file, i) => {

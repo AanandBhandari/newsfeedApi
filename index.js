@@ -20,6 +20,8 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 require('./config/passport').isAdmin(passport);
 require('./config/passport').isLogin(passport);
+require('./config/passport').googleStrategy(passport);
+
 
 
 
