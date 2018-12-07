@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const PostSchema = new Schema({
+    user: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "user"
+      },  
     images : [],
     date : {
         type : Date,
@@ -10,4 +15,4 @@ const PostSchema = new Schema({
         type : String
     }
 })
-exports.AddPosts = mongoose.model('addPosts', PostSchema)
+exports.Post = mongoose.model('Post', PostSchema)

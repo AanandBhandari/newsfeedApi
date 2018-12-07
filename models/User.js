@@ -28,7 +28,19 @@ const UserSchema = new Schema({
         type : Boolean,
         default : false
     },
-    googleId : String
+    googleId : String,
+    friends : [
+        {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: "user"
+              },
+              approveRequest : {
+                type : Boolean,
+                default : false
+            }
+        }
+    ]
 })
 
 exports.User = mongoose.model('user', UserSchema);
