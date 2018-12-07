@@ -56,11 +56,12 @@ exports.googleStrategy = passport => {
                    googleId : profile._json.id,
                    pic : profile._json.image.url
                }).save().then((user) => {
-                       const payload = {id : user.id, name : user.name, isAdmin : user.isAdmin};
-                       jwt.sign(payload,secretKey, {expiresIn : expireTime}, (err,token) => {
+                    //    const payload = {id : user.id, name : user.name, isAdmin : user.isAdmin};
+                    //    jwt.sign(payload,secretKey, {expiresIn : expireTime}, (err,token) => {
                                              
-                       done(null,token);
-                       });
+                    //    done(null,token);
+                    //    });
+                    done(null,user)
                                                             
             });
            } 
@@ -69,17 +70,20 @@ exports.googleStrategy = passport => {
     ))
     passport.serializeUser(function(token, done) {
         // console.log(user.id);
-        done(null,token );
+        done(null,token.id );
       });
       passport.deserializeUser(function(token, done) {
-        jwt.verify(token, secretKey, function(err, decoded) {
+        // jwt.verify(token, secretKey, function(err, decoded) {
             
-            if (!err) {
-                User.findById(decoded.id, function(error, user) {
-                    done(error, user);
-                  });
-            }
+        //     if (!err) {
+        //         User.findById(decoded.id, function(error, user) {
+        //             done(error, user);
+        //           });
+        //     }
                    
+        //   });
+        User.findById(id, function(err, user) {
+            done(err, user);
           });
         
        });

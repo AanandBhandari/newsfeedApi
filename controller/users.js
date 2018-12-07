@@ -7,8 +7,13 @@ const passportGoogle = require('passport');
 exports.loginWithGoogle = passportGoogle.authenticate('google',{scope:['profile','email']});
 exports.callbackUri = passportGoogle.authenticate('google',{ session: false });
 exports.googleCallBackFunction = async(req,res) => {
-    // console.log(req.user)
-    console.log(req.user)
+    const payload = {id : req.user.id, name : req.user.name, isAdmin : req.user.isAdmin};
+    jwt.sign(payload,secretKey, {expiresIn : expireTime}, (err,token) => {
+        res.json({
+            success : true,
+            token : token
+        });
+    });
 }
 
 exports.register = async(req,res) => {
