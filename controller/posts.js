@@ -50,8 +50,34 @@ exports.friendRequest = async(req,res) => {
         res.send('U r the bestest friend of urslf :)')
     }
 }
-exports.approveRequest = async(req,res) => {
-
+exports.approveReqOrDltFriend = async(req,res) => {
+    const me = await User.findById(req.user._id);
+    let removeIndex;
+    for (let i = 0; i < me.friends.length; i++) {
+        if(!me.friends[i].approveRequest){
+            me.friends[i].approveRequest =true;
+            break;
+        } else {
+            removeIndex = me.indexOf(friends[i]);
+            me.friends.splice(removeIndex,1)
+            break;
+        }
+        
+    }
+    // me.friends.forEach(friend => {
+    // if (friend.user.toString() === req.params.id) {
+    //     if (!friend.approveRequest) {
+    //         friend.approveRequest = true;
+    //         // break;
+    //         } else {
+    //             removeIndex = me.friends.indexOf(friend);
+    //             me.friends.splice(removeIndex,1);
+    //             // break;
+    //         }
+    // }
+    // })
+    const savedFriends = await me.save();
+    res.status(200).json(savedFriends);
 }
 exports.allUnapprovedRequest = async(req,res) => {
     const me = await User.findById(req.user._id)
@@ -66,3 +92,21 @@ exports.allUnapprovedRequest = async(req,res) => {
         res.json(unapprovereqs)
     }
 }
+exports.declineRequest = async(req,res) => {
+    const me = await User.findById(req.user._id)
+    if (me) {
+        let removeIndex;
+        me.friends.forEach(friend => {
+        if (friend.user.toString() === req.params.id) {
+            if (!friend.approveRequest) {
+                    removeIndex = me.friends.indexOf(friend);
+                    me.friends.splice(removeIndex,1);
+                    // break;
+                }
+        }
+        })
+            
+        }
+        const savedFriends = await me.save();
+    res.status(200).json(savedFriends);
+    }

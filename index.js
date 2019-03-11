@@ -22,9 +22,6 @@ require('./config/passport').isAdmin(passport);
 require('./config/passport').isLogin(passport);
 require('./config/passport').googleStrategy(passport);
 
-
-
-
 app.use('/api', require('./routes/routes.js'));
 
   app.listen(PORT, ()=>{

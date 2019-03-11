@@ -1,5 +1,5 @@
 const Router = require('express').Router();
-const {showPosts, addPosts, searchFriends, friendRequest,approveRequest,allUnapprovedRequest} = require('../controller/posts.js')
+const {showPosts, addPosts, searchFriends, friendRequest,approveReqOrDltFriend,allUnapprovedRequest} = require('../controller/posts.js')
 const {register,login,loginWithGoogle,callbackUri,googleCallBackFunction} = require('../controller/users.js')
 const {uploadImage,uploadUserPic} = require('../helpers/multer.js')
 const isAdmin = require('passport');
@@ -21,7 +21,8 @@ Router.route('/newsfeeds')
 Router
     .get('/searchfriends',searchFriends)
     .get('/friendrequest/:id',ensureLogin,friendRequest)
-    .get('/approveRequest',approveRequest)
+    .get('/approveReqOrUnfriend/:id',ensureLogin,approveReqOrDltFriend)
     .get('/allUnapprovedRequest',ensureLogin,allUnapprovedRequest)
+    // .get('/declineRequest/:id',ensureLogin,declineRequest)
     
 module.exports = Router;
